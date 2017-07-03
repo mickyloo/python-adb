@@ -22,8 +22,6 @@ import stat
 import struct
 import time
 
-import libusb1
-
 from adb import adb_protocol
 from adb import usb_exceptions
 
@@ -209,7 +207,7 @@ class FileSyncConnection(object):
   def _Flush(self):
     try:
       self.adb.Write(self.send_buffer[:self.send_idx])
-    except libusb1.USBError as e:
+    except Exception as e:
       raise adb_protocol.SendFailedError(
           'Could not send data %s' % self.send_buffer, e)
     self.send_idx = 0

@@ -16,63 +16,22 @@ multiple simultaneous commands to the same device. It does support any number of
 devices and _never_ communicates with a device that it wasn't intended to,
 unlike the Android project's ADB.
 
+### Using with Emulator
+This is a stripped down version of the upstream repo with USBHandler 
+and signing removed.  Only support for TCPHandle remains.  The additional 
+dependencies are also removed making it easier to install on Windows environment.
 
-### Using as standalone tool
-
-Running `./make_tools.py` creates two files: `adb.zip` and `fastboot.zip`. They
-can be run similar to native `adb` and `fastboot` via the python interpreter:
-
-    python adb.zip devices
-    python adb.zip shell ls /sdcard
-
-### Using as a Python Library
-
-A [presentation was made at PyCon 2016][pycon_preso], and here's some demo code:
+It is meant to be used with AmiDUOS emulator Lollipop version.
 
 ```python
-import os.path as op
 
-from adb import adb_commands
-from adb import sign_m2crypto
+from adb.adb_commands import AdbCommands
 
-
-# KitKat+ devices require authentication
-signer = sign_m2crypto.M2CryptoSigner(
-    op.expanduser('~/.android/adbkey'))
-# Connect to the device
-device = adb_commands.AdbCommands.ConnectDevice(
-    rsa_keys=[signer])
-# Now we can use Shell, Pull, Push, etc!
-for i in xrange(10):
-  print device.Shell('echo %d' % i)
+device = AdbCommands.ConnectDevice(serial='localhost:5565')
+device.Shell('echo 1')
+device.Shell('screencap -p')
 ```
 
-### Pros
-
-  * Simpler code due to use of libusb1 and Python.
-  * API can be used by other Python code easily.
-  * Errors are propagated with tracebacks, helping debug connectivity issues.
-  * No daemon outliving the command.
-  * Can be packaged as standalone zips that can be run independent of the CPU
-    architecture (e.g. x86 vs ARM).
-
-
-### Cons
-
-  * Technically slower due to Python, mitigated by no daemon.
-  * Only one command per device at a time.
-  * More dependencies than Android's ADB.
-
-
-### Dependencies
-
-  * libusb1 (1.0.16+)
-  * python-libusb1 (1.2.0+)
-  * `adb.zip`: one of:
-    * python-m2crypto (0.21.1+)
-    * python-rsa (3.2+)
-  * `fastboot.zip` (optional):
-    * python-progressbar (2.3+)
 
 ### History
 

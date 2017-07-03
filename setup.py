@@ -17,7 +17,7 @@ from setuptools import setup
 setup(
     name = 'adb',
     packages = ['adb'],
-    version = '1.2.0',
+    version = '1.2.0.post1+lite',
     author = 'Fahrzin Hemmati',
     author_email = 'fahhem@gmail.com',
     maintainer = 'Fahrzin Hemmati',
@@ -42,12 +42,6 @@ Android project's ADB.
 ''',
 
     keywords = ['android', 'adb', 'fastboot'],
-
-    install_requires = ['libusb1>=1.0.16', 'M2Crypto>=0.21.1'],
-
-    extra_requires = {
-        'fastboot': 'progressbar>=2.3'
-    },
 
 ## classifier list https://pypi.python.org/pypi?:action=list_classifiers
     classifiers = [
